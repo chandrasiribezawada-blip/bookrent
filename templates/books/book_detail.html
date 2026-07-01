@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{{ book.title }}</h2>
+
+{% if book.image %}
+<img src="{{ book.image.url }}"
+     width="250">
+{% endif %}
+
+<p><strong>Author:</strong> {{ book.author }}</p>
+<p><strong>Category:</strong> {{ book.category }}</p>
+<p><strong>Description:</strong> {{ book.description }}</p>
+
+{% endblock %}

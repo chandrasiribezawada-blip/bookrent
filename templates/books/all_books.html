@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Available Books</h2>
+
+<form method="GET" class="mb-3">
+
+    <input type="text"
+           name="search"
+           placeholder="Search books..."
+           class="form-control">
+
+</form>
+
+{% for book in books %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h4>{{ book.title }}</h4>
+
+        <p>
+            Author: {{ book.author }}
+        </p>
+
+        <p>
+            Category: {{ book.category }}
+        </p>
+
+        <a href="{% url 'book_detail' book.id %}"
+           class="btn btn-primary">
+
+            View Details
+
+        </a>
+            {% if user.role == 'BORROWER' %}
+
+<a href="{% url 'request_book' book.id %}"
+   class="btn btn-success">
+
+   Request Book
+
+</a>
+
+{% endif %}
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>No books found.</p>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>My Books</h2>
+
+{% for book in books %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h5>
+    <a href="{% url 'book_detail' book.id %}">
+        {{ book.title }}
+    </a>
+</h5>
+
+        <p>{{ book.author }}</p>
+
+        <p>{{ book.category }}</p>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>No books added yet.</p>
+
+{% endfor %}
+
+{% endblock %}

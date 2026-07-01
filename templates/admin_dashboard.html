@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Admin Dashboard
+</h1>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_users }}</h3>
+                <p>Total Users</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_owners }}</h3>
+                <p>Owners</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_borrowers }}</h3>
+                <p>Borrowers</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ total_books }}</h3>
+                <p>Books</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ pending_requests }}</h3>
+                <p>Pending Requests</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ approved_requests }}</h3>
+                <p>Approved Rentals</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h3>{{ returned_books }}</h3>
+                <p>Returned Books</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

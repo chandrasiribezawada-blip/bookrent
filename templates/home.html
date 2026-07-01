@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container text-center mt-5">
+
+    <h1>📚 BookRent</h1>
+
+    <h4>Rent Books • Share Knowledge</h4>
+
+    <p>
+        Discover books from other readers
+        or earn by renting your own books.
+    </p>
+
+    <br>
+
+    <a href="{% url 'register_borrower' %}"
+       class="btn btn-primary btn-lg">
+
+       I Want To Rent Books
+
+    </a>
+
+    <a href="{% url 'register_owner' %}"
+       class="btn btn-success btn-lg">
+
+       I Want To List My Books
+
+    </a>
+
+    <br><br>
+
+    <a href="{% url 'login' %}"
+       class="btn btn-outline-dark">
+
+       Login
+
+    </a>
+
+</div>
+
+{% endblock %}
