@@ -1,62 +1,51 @@
 {% extends 'base.html' %}
 
+{% block title %}Rental requests — BookRent{% endblock %}
+
 {% block content %}
+<section class="page-heading">
+    <span class="eyebrow">Reader interest</span>
+    <h1>Rental requests</h1>
+    <p>Review requests for the books in your collection.</p>
+</section>
 
-<div class="container mt-4">
-
-    <h2>Owner Rental Requests</h2>
-
-    {% for req in requests %}
-
-    <div class="card mb-3 shadow-sm">
-
-        <div class="card-body">
-
-            <h4>{{ req.book.title }}</h4>
-
-            <p>
-                <strong>Borrower:</strong>
-                {{ req.borrower.username }}
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                {{ req.status }}
-            </p>
-
-            <p>
-                <strong>Requested On:</strong>
-                {{ req.request_date }}
-            </p>
-
-            {% if req.status == 'PENDING' %}
-
-            <a href="{% url 'approve_request' req.id %}"
-               class="btn btn-success">
-
-                Approve
-            </a>
-
-            <a href="{% url 'reject_request' req.id %}"
-               class="btn btn-danger">
-
-                Reject
-            </a>
-
-            {% endif %}
-
-        </div>
-
-    </div>
-
-    {% empty %}
-
-    <div class="alert alert-info">
-        No rental requests yet.
-    </div>
-
-    {% endfor %}
-
-</div>
-
+{% if requests %}
+    <section class="request-list" aria-label="Rental requests">
+        {% for req in requests %}
+            <article class="request-card">
+                <div class="request-main">
+                    <div class="request-avatar" aria-hidden="true">{{ req.book.title|first|upper }}</div>
+                    <div>
+                        <span class="category-label">{{ req.book.category }}</span>
+                        <h2>{{ req.book.title }}</h2>
+                        <p class="request-byline">Requested by <strong>{{ req.borrower.username }}</strong></p>
+                        <p class="request-date">Requested <time datetime="{{ req.request_date|date:'c' }}">{{ req.request_date|date:"M j, Y · g:i A" }}</time></p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <span class="status-badge status-{{ req.status|lower }}">{{ req.get_status_display }}</span>
+                    {% if req.status == 'PENDING' %}
+                        <div class="button-row">
+                            <form method="post" action="{% url 'approve_request' req.id %}">
+                                {% csrf_token %}
+                                <button class="button button-small button-primary" type="submit">Approve</button>
+                            </form>
+                            <form method="post" action="{% url 'reject_request' req.id %}">
+                                {% csrf_token %}
+                                <button class="button button-small button-danger-outline" type="submit">Decline</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state" aria-labelledby="requests-empty-title">
+        <span class="empty-mark" aria-hidden="true">B</span>
+        <h2 id="requests-empty-title">No requests just yet.</h2>
+        <p>When a reader requests one of your books, you’ll find it here.</p>
+        <a class="button button-secondary" href="{% url 'my_books' %}">View my collection</a>
+    </section>
+{% endif %}
 {% endblock %}

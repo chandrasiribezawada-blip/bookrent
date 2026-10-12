@@ -1,58 +1,68 @@
 {% extends 'base.html' %}
 
+{% block title %}Explore books — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>Available Books</h2>
-
-<form method="GET" class="mb-3">
-
-    <input type="text"
-           name="search"
-           placeholder="Search books..."
-           class="form-control">
-
-</form>
-
-{% for book in books %}
-
-<div class="card mb-3">
-
-    <div class="card-body">
-
-        <h4>{{ book.title }}</h4>
-
-        <p>
-            Author: {{ book.author }}
-        </p>
-
-        <p>
-            Category: {{ book.category }}
-        </p>
-
-        <a href="{% url 'book_detail' book.id %}"
-           class="btn btn-primary">
-
-            View Details
-
-        </a>
-            {% if user.role == 'BORROWER' %}
-
-<a href="{% url 'request_book' book.id %}"
-   class="btn btn-success">
-
-   Request Book
-
-</a>
-
-{% endif %}
+<section class="page-heading discovery-heading">
+    <div>
+        <span class="eyebrow">The community bookshelf</span>
+        <h1>Find your next read.</h1>
+        <p>Explore stories shared by readers, ready for a new chapter.</p>
     </div>
+    <form method="get" action="{% url 'all_books' %}" class="search-form" role="search">
+        <label class="visually-hidden" for="book-search">Search by title, author, or category</label>
+        <input id="book-search" type="search" name="search"
+               value="{{ request.GET.search|default:'' }}"
+               placeholder="Title, author, or category">
+        <button class="button button-primary" type="submit">Search</button>
+    </form>
+</section>
 
-</div>
-
-{% empty %}
-
-<p>No books found.</p>
-
-{% endfor %}
-
+{% if books %}
+    <section class="book-grid" aria-label="Available books">
+        {% for book in books %}
+            <article class="book-card">
+                <a class="book-cover-link" href="{% url 'book_detail' book.id %}" aria-label="View {{ book.title }}">
+                    <div class="book-cover">
+                        {% if book.image %}
+                            <img src="{{ book.image.url }}" alt="Cover of {{ book.title }}">
+                        {% else %}
+                            <div class="cover-placeholder" role="img" aria-label="Placeholder cover; no image provided for {{ book.title }}">
+                                <span class="cover-mark" aria-hidden="true">B</span>
+                                <span class="cover-title">{{ book.title }}</span>
+                                <span class="cover-author">{{ book.author }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <div class="book-meta">
+                        <span class="category-label">{{ book.category }}</span>
+                        <span class="status-badge status-available">Available</span>
+                    </div>
+                    <h2><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></h2>
+                    <p class="book-author">by {{ book.author }}</p>
+                    <div class="book-card-actions">
+                        <a class="button button-small button-secondary" href="{% url 'book_detail' book.id %}">View details</a>
+                        {% if user.is_authenticated and user.role == 'BORROWER' %}
+                            <form method="post" action="{% url 'request_book' book.id %}">
+                                {% csrf_token %}
+                                <button class="button button-small button-primary" type="submit">Request</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state" aria-labelledby="books-empty-title">
+        <span class="empty-mark" aria-hidden="true">B</span>
+        <h2 id="books-empty-title">{% if request.GET.search %}No books match that search.{% else %}The shelves are waiting.{% endif %}</h2>
+        <p>{% if request.GET.search %}Try another title, author, or category.{% else %}There are no available books to show right now. Check back soon.{% endif %}</p>
+        {% if request.GET.search %}
+            <a class="button button-secondary" href="{% url 'all_books' %}">Clear search</a>
+        {% endif %}
+    </section>
+{% endif %}
 {% endblock %}

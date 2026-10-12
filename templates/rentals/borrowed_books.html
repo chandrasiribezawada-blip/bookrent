@@ -1,30 +1,46 @@
 {% extends 'base.html' %}
 
+{% block title %}My rentals — BookRent{% endblock %}
+
 {% block content %}
+<section class="page-heading">
+    <span class="eyebrow">Stories on loan</span>
+    <h1>My rentals</h1>
+    <p>Books you’re currently borrowing from the BookRent community.</p>
+</section>
 
-<h2>Borrowed Books</h2>
-
-{% for rental in rentals %}
-
-<div class="card mb-3">
-
-    <div class="card-body">
-
-        <h5>{{ rental.book.title }}</h5>
-
-        <p>Status: {{ rental.status }}</p>
-
-        <a href="{% url 'return_book' rental.id %}"
-           class="btn btn-warning">
-
-           Return Book
-
-        </a>
-
-    </div>
-
-</div>
-
-{% endfor %}
-
+{% if rentals %}
+    <section class="rental-list" aria-label="Current rentals">
+        {% for rental in rentals %}
+            <article class="rental-card">
+                <div class="rental-cover">
+                    {% if rental.book.image %}
+                        <img src="{{ rental.book.image.url }}" alt="Cover of {{ rental.book.title }}">
+                    {% else %}
+                        <div class="cover-placeholder rental-cover-placeholder" role="img" aria-label="Placeholder cover; no image provided for {{ rental.book.title }}">
+                            <span class="cover-mark" aria-hidden="true">B</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="rental-copy">
+                    <span class="category-label">{{ rental.book.category }}</span>
+                    <h2><a href="{% url 'book_detail' rental.book.id %}">{{ rental.book.title }}</a></h2>
+                    <p class="book-author">by {{ rental.book.author }}</p>
+                    <span class="status-badge status-approved">{{ rental.get_status_display }}</span>
+                </div>
+                <form method="post" action="{% url 'return_book' rental.id %}">
+                    {% csrf_token %}
+                    <button class="button button-secondary" type="submit">Mark as returned</button>
+                </form>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state" aria-labelledby="rentals-empty-title">
+        <span class="empty-mark" aria-hidden="true">B</span>
+        <h2 id="rentals-empty-title">Your next read is out there.</h2>
+        <p>You don’t have any active rentals yet. Browse the available books and find a story to take home.</p>
+        <a class="button button-primary" href="{% url 'all_books' %}">Explore available books</a>
+    </section>
+{% endif %}
 {% endblock %}

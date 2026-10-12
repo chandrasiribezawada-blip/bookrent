@@ -1,16 +1,41 @@
 {% extends 'base.html' %}
 
+{% block title %}{{ book.title }} — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>{{ book.title }}</h2>
-
-{% if book.image %}
-<img src="{{ book.image.url }}"
-     width="250">
-{% endif %}
-
-<p><strong>Author:</strong> {{ book.author }}</p>
-<p><strong>Category:</strong> {{ book.category }}</p>
-<p><strong>Description:</strong> {{ book.description }}</p>
-
+<p class="breadcrumb-line"><a href="{% url 'all_books' %}">Explore books</a><span aria-hidden="true">/</span><span>{{ book.title }}</span></p>
+<article class="book-detail">
+    <div class="detail-cover-wrap">
+        <div class="detail-cover">
+            {% if book.image %}
+                <img src="{{ book.image.url }}" alt="Cover of {{ book.title }}">
+            {% else %}
+                <div class="cover-placeholder cover-placeholder-large" role="img" aria-label="Placeholder cover; no image provided for {{ book.title }}">
+                    <span class="cover-mark" aria-hidden="true">B</span>
+                    <span class="cover-title">{{ book.title }}</span>
+                    <span class="cover-author">{{ book.author }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="detail-copy">
+        <span class="category-label">{{ book.category }}</span>
+        <h1>{{ book.title }}</h1>
+        <p class="detail-author">by {{ book.author }}</p>
+        <span class="status-badge {% if book.is_available %}status-available{% else %}status-unavailable{% endif %}">
+            {% if book.is_available %}Available to request{% else %}Currently borrowed{% endif %}
+        </span>
+        <div class="detail-description">
+            <h2>About this book</h2>
+            <p>{{ book.description|linebreaksbr }}</p>
+        </div>
+        {% if user.is_authenticated and user.role == 'BORROWER' and book.is_available %}
+            <form method="post" action="{% url 'request_book' book.id %}">
+                {% csrf_token %}
+                <button class="button button-primary button-large" type="submit">Request this book <span aria-hidden="true">→</span></button>
+            </form>
+        {% endif %}
+        <a class="text-link detail-back" href="{% url 'all_books' %}">← Back to all books</a>
+    </div>
+</article>
 {% endblock %}

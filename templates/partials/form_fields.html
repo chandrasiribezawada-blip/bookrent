@@ -1,0 +1,25 @@
+{% for field in form %}
+    {% if field.is_hidden %}
+        {{ field }}
+    {% elif field.name == 'role' and fixed_role %}
+        <div class="account-role">
+            <span class="field-label">Account type</span>
+            <div class="role-choice">
+                <span class="role-value">{{ fixed_role_label }}</span>
+                <a class="role-switch" href="{% url fixed_role_switch %}">{{ fixed_role_switch_label }}</a>
+            </div>
+            <input type="hidden" name="{{ field.html_name }}" value="{{ fixed_role }}">
+            {% if field.errors %}<div class="field-errors" role="alert">{{ field.errors }}</div>{% endif %}
+        </div>
+    {% else %}
+        <div class="form-field{% if field.errors %} has-error{% endif %}">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}<div class="field-help">{{ field.help_text|safe }}</div>{% endif %}
+            {% if field.errors %}<div class="field-errors" role="alert">{{ field.errors }}</div>{% endif %}
+        </div>
+    {% endif %}
+{% endfor %}
+{% if form.non_field_errors %}
+    <div class="field-errors form-errors" role="alert">{{ form.non_field_errors }}</div>
+{% endif %}

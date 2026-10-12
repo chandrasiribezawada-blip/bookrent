@@ -1,43 +1,49 @@
 {% extends 'base.html' %}
 
+{% block title %}BookRent — Find your next favourite book{% endblock %}
+
 {% block content %}
+<section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+        <span class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> A community of readers</span>
+        <h1 id="hero-title">A good book.<br><em>A new reader.</em></h1>
+        <p class="hero-description">
+            Find your next favourite on a neighbour’s shelf—or share a story
+            you’ve loved with someone new.
+        </p>
+        <div class="hero-actions">
+            <a class="button button-primary button-large" href="{% url 'all_books' %}">
+                Browse books <span aria-hidden="true">→</span>
+            </a>
+            {% if user.is_authenticated and user.role == 'OWNER' %}
+                <a class="button button-secondary button-large" href="{% url 'add_book' %}">List your books</a>
+            {% else %}
+                <a class="button button-secondary button-large" href="{% url 'register_owner' %}">List your books</a>
+            {% endif %}
+        </div>
+        <p class="hero-note">Read more. Keep less. Share the joy.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+        <div class="art-sun"></div>
+        <div class="art-book art-book-back"><span>stories<br>we share</span></div>
+        <div class="art-book art-book-middle"><span>the next<br>chapter</span></div>
+        <div class="art-book art-book-front"><span>READ<br>AGAIN</span><i></i></div>
+        <div class="art-caption">A little more wonder, in every hand.</div>
+    </div>
+</section>
 
-<div class="container text-center mt-5">
-
-    <h1>📚 BookRent</h1>
-
-    <h4>Rent Books • Share Knowledge</h4>
-
-    <p>
-        Discover books from other readers
-        or earn by renting your own books.
-    </p>
-
-    <br>
-
-    <a href="{% url 'register_borrower' %}"
-       class="btn btn-primary btn-lg">
-
-       I Want To Rent Books
-
-    </a>
-
-    <a href="{% url 'register_owner' %}"
-       class="btn btn-success btn-lg">
-
-       I Want To List My Books
-
-    </a>
-
-    <br><br>
-
-    <a href="{% url 'login' %}"
-       class="btn btn-outline-dark">
-
-       Login
-
-    </a>
-
-</div>
-
+<section class="home-values" aria-label="How BookRent works">
+    <article class="value-item">
+        <span class="value-number">01</span>
+        <div><h2>Discover</h2><p>Explore books already waiting for their next reader.</p></div>
+    </article>
+    <article class="value-item">
+        <span class="value-number">02</span>
+        <div><h2>Borrow</h2><p>Send a request and follow its progress from your account.</p></div>
+    </article>
+    <article class="value-item">
+        <span class="value-number">03</span>
+        <div><h2>Share</h2><p>Give the books you love another life with a new reader.</p></div>
+    </article>
+</section>
 {% endblock %}

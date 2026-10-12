@@ -1,82 +1,73 @@
 {% extends 'base.html' %}
 
+{% block title %}Admin overview — BookRent{% endblock %}
+
 {% block content %}
-
-<h1 class="mb-4">
-    Admin Dashboard
-</h1>
-
-<div class="row">
-
-    <div class="col-md-3">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ total_users }}</h3>
-                <p>Total Users</p>
-            </div>
-        </div>
+<section class="page-heading page-heading-split">
+    <div>
+        <span class="eyebrow">Your BookRent space</span>
+        <h1>Admin overview</h1>
+        <p>A clear view of the community, the books listed, and current rentals.</p>
     </div>
+    <a class="button button-primary" href="{% url 'admin:index' %}">Open admin panel</a>
+</section>
 
-    <div class="col-md-3">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ total_owners }}</h3>
-                <p>Owners</p>
-            </div>
-        </div>
+<section class="stat-grid admin-stat-grid" aria-label="Marketplace statistics">
+    <article class="stat-card stat-card-featured">
+        <span class="stat-label">Community members</span>
+        <strong class="stat-number">{{ total_users }}</strong>
+        <span class="stat-note">All registered accounts</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Book owners</span>
+        <strong class="stat-number">{{ total_owners }}</strong>
+        <span class="stat-note">Sharing their collections</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Readers</span>
+        <strong class="stat-number">{{ total_borrowers }}</strong>
+        <span class="stat-note">Looking for their next read</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Books listed</span>
+        <strong class="stat-number">{{ total_books }}</strong>
+        <span class="stat-note">In the marketplace</span>
+    </article>
+</section>
+
+<section class="page-subsection">
+    <div class="subsection-heading">
+        <span class="eyebrow">Rental activity</span>
+        <h2>Books changing hands</h2>
     </div>
-
-    <div class="col-md-3">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ total_borrowers }}</h3>
-                <p>Borrowers</p>
-            </div>
-        </div>
+    <div class="stat-grid rental-stat-grid">
+        <article class="stat-card">
+            <span class="stat-label">Pending requests</span>
+            <strong class="stat-number">{{ pending_requests }}</strong>
+            <span class="stat-note">Waiting for an owner</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">Approved rentals</span>
+            <strong class="stat-number">{{ approved_requests }}</strong>
+            <span class="stat-note">Currently on loan</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">Returned</span>
+            <strong class="stat-number">{{ returned_books }}</strong>
+            <span class="stat-note">Completed rentals</span>
+        </article>
     </div>
+</section>
 
-    <div class="col-md-3">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ total_books }}</h3>
-                <p>Books</p>
-            </div>
-        </div>
+<section class="dashboard-next">
+    <div>
+        <span class="eyebrow">Your next step</span>
+        <h2>Keep the community bookshelf thriving.</h2>
+        <p>Manage BookRent records or see what readers can discover today.</p>
     </div>
-
-</div>
-
-<hr>
-
-<div class="row">
-
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ pending_requests }}</h3>
-                <p>Pending Requests</p>
-            </div>
-        </div>
+    <div class="dashboard-actions">
+        <a class="button button-secondary" href="{% url 'admin:index' %}">Manage BookRent</a>
+        <a class="button button-secondary" href="{% url 'all_books' %}">Explore books</a>
     </div>
-
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ approved_requests }}</h3>
-                <p>Approved Rentals</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body text-center">
-                <h3>{{ returned_books }}</h3>
-                <p>Returned Books</p>
-            </div>
-        </div>
-    </div>
-
-</div>
-
+</section>
 {% endblock %}

@@ -1,22 +1,25 @@
 {% extends 'base.html' %}
 
+{% block title %}Join as a book owner — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>Owner Registration</h2>
-
-<form method="POST">
-
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit"
-            class="btn btn-success">
-
-        Register
-
-    </button>
-
-</form>
-
+<section class="form-page" aria-labelledby="register-title">
+    <div class="form-aside owner-aside">
+        <span class="eyebrow">For the keepers of stories</span>
+        <h1>Your bookshelf could be someone’s next favourite.</h1>
+        <p>Make your books available to readers nearby and keep good stories moving.</p>
+        <span class="aside-ornament" aria-hidden="true">B</span>
+    </div>
+    <div class="form-panel">
+        <span class="eyebrow">Start sharing</span>
+        <h2 id="register-title">Create an owner account</h2>
+        <p class="form-intro">A few details, then you can start building your collection.</p>
+        <form method="post" class="form-shell">
+            {% csrf_token %}
+            {% include 'partials/form_fields.html' with fixed_role='OWNER' fixed_role_label='Book owner' fixed_role_switch='register_borrower' fixed_role_switch_label='Register as reader →' %}
+            <button class="button button-primary button-full" type="submit">Create owner account <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-switch">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+</section>
 {% endblock %}

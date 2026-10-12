@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 
+{% block title %}Create an account — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>Register</h2>
-
-<form method="POST">
-
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit"
-            class="btn btn-primary">
-
-        Register
-
-    </button>
-
-</form>
-
+<section class="form-page" aria-labelledby="register-title">
+    <div class="form-aside">
+        <span class="eyebrow">Welcome to BookRent</span>
+        <h1>Make room for a new story.</h1>
+        <p>Join a community built around sharing the books we love.</p>
+    </div>
+    <div class="form-panel">
+        <span class="eyebrow">Create your account</span>
+        <h2 id="register-title">Register</h2>
+        <form method="post" class="form-shell">
+            {% csrf_token %}
+            {% include 'partials/form_fields.html' %}
+            <button class="button button-primary button-full" type="submit">Create account</button>
+        </form>
+    </div>
+</section>
 {% endblock %}

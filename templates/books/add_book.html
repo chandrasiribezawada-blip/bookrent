@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 
+{% block title %}List a book — BookRent{% endblock %}
+
 {% block content %}
+<section class="page-heading page-heading-split">
+    <div>
+        <span class="eyebrow">Add to the community shelf</span>
+        <h1>List a book</h1>
+        <p>Share a few details so readers can find the right story.</p>
+    </div>
+    <a class="text-link" href="{% url 'my_books' %}">View my collection <span aria-hidden="true">→</span></a>
+</section>
 
-<h2>Add Book</h2>
-
-<form method="POST"
-      enctype="multipart/form-data">
-
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button class="btn btn-primary">
-        Add Book
-    </button>
-
-</form>
-
+<section class="content-panel form-content-panel">
+    <form method="post" enctype="multipart/form-data" class="form-shell">
+        {% csrf_token %}
+        {% include 'partials/form_fields.html' %}
+        <div class="form-actions">
+            <button class="button button-primary" type="submit">Add to my collection</button>
+            <a class="button button-quiet" href="{% url 'my_books' %}">Cancel</a>
+        </div>
+    </form>
+</section>
 {% endblock %}

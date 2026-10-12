@@ -1,22 +1,26 @@
 {% extends 'base.html' %}
 
+{% block title %}Log in — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>Login</h2>
-
-<form method="POST">
-
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit"
-            class="btn btn-success">
-
-        Login
-
-    </button>
-
-</form>
-
+<section class="form-page" aria-labelledby="login-title">
+    <div class="form-aside">
+        <span class="eyebrow">Welcome back</span>
+        <h1>Pick up where your next story begins.</h1>
+        <p>Log in to browse your rentals, manage your collection, and share a little more reading joy.</p>
+        <span class="aside-ornament" aria-hidden="true">“</span>
+    </div>
+    <div class="form-panel">
+        <span class="eyebrow">Your BookRent account</span>
+        <h2 id="login-title">Log in</h2>
+        <p class="form-intro">Enter your account details below.</p>
+        <form method="post" class="form-shell">
+            {% csrf_token %}
+            {% include 'partials/form_fields.html' %}
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button class="button button-primary button-full" type="submit">Log in <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-switch">New to BookRent? <a href="{% url 'register_borrower' %}">Create an account</a></p>
+    </div>
+</section>
 {% endblock %}

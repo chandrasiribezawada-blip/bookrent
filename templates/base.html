@@ -1,116 +1,87 @@
-<!DOCTYPE html>
-<html>
+{% load static %}
+<!doctype html>
+<html lang="en">
 <head>
-    <title>BookRent</title>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f5ef">
+    <title>{% block title %}BookRent — Books worth sharing{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Discover books shared by readers in your community, or give your own collection a second life.{% endblock %}">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+<header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a class="brand" href="{% url 'home' %}" aria-label="BookRent home">
+                <span class="brand-mark" aria-hidden="true">B</span>
+                <span>Book<span class="brand-light">Rent</span></span>
+            </a>
 
-        <a class="navbar-brand"
-           href="{% url 'home' %}">
-            📚 BookRent
-        </a>
-
-        <div>
-
-            {% if not user.is_authenticated %}
-
-                <a href="{% url 'all_books' %}"
-                   class="btn btn-outline-light btn-sm me-2">
-                   Browse Books
-                </a>
-
-                <a href="{% url 'login' %}"
-                   class="btn btn-success btn-sm">
-                   Login
-                </a>
-
-            {% endif %}
-
-
-            {% if user.is_authenticated %}
-
-                <span class="text-white me-3">
-                    Hello, {{ user.username }}
-                </span>
-
-                {% if user.role == 'OWNER' %}
-
-                    <a href="{% url 'owner_dashboard' %}"
-                       class="btn btn-primary btn-sm me-2">
-                       Dashboard
-                    </a>
-
-                    <a href="{% url 'add_book' %}"
-                       class="btn btn-success btn-sm me-2">
-                       Add Book
-                    </a>
-
-                    <a href="{% url 'my_books' %}"
-                       class="btn btn-info btn-sm me-2">
-                       My Books
-                    </a>
-
-                    <a href="{% url 'owner_requests' %}"
-                       class="btn btn-warning btn-sm me-2">
-                       Requests
-                    </a>
-
-                {% endif %}
-
-
-                {% if user.role == 'BORROWER' %}
-
-                    <a href="{% url 'all_books' %}"
-                       class="btn btn-info btn-sm me-2">
-                       Browse Books
-                    </a>
-
-                    <a href="{% url 'borrowed_books' %}"
-                       class="btn btn-warning btn-sm me-2">
-                       My Rentals
-                    </a>
-
-                {% endif %}
-
-
-                {% if user.role == 'ADMIN' %}
-
-                    <a href="/admin/"
-                       class="btn btn-primary btn-sm me-2">
-                       Admin Panel
-                    </a>
-
-                {% endif %}
-
-                <form action="{% url 'logout' %}"
-      method="post"
-      style="display:inline;">
-    {% csrf_token %}
-    <button type="submit"
-            class="btn btn-danger btn-sm">
-        Logout
-    </button>
-</form>
-
-            {% endif %}
-
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation"
+                    aria-expanded="false" aria-controls="primary-navigation" hidden>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </button>
+            <div class="nav-links" id="primary-navigation">
+                    <a class="nav-link" href="{% url 'all_books' %}">Explore books</a>
+                    {% if user.is_authenticated %}
+                        {% if user.role == 'OWNER' %}
+                            <a class="nav-link" href="{% url 'owner_dashboard' %}">Dashboard</a>
+                            <a class="nav-link" href="{% url 'my_books' %}">My collection</a>
+                            <a class="nav-link" href="{% url 'owner_requests' %}">Requests</a>
+                            <a class="button button-small button-primary nav-action"
+                               href="{% url 'add_book' %}">List a book</a>
+                        {% elif user.role == 'BORROWER' %}
+                            <a class="nav-link" href="{% url 'borrowed_books' %}">My rentals</a>
+                        {% elif user.role == 'ADMIN' %}
+                            <a class="nav-link" href="{% url 'admin_dashboard' %}">Overview</a>
+                            <a class="nav-link" href="{% url 'admin:index' %}">Admin panel</a>
+                        {% endif %}
+                        <span class="nav-greeting">Hello, {{ user.username }}</span>
+                        <form class="nav-logout" action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button class="button button-small button-outline" type="submit">Log out</button>
+                        </form>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'register_owner' %}">List your books</a>
+                        <a class="button button-small button-outline nav-login" href="{% url 'login' %}">Log in</a>
+                        <a class="button button-small button-primary" href="{% url 'register_borrower' %}">Join BookRent</a>
+                    {% endif %}
+            </div>
         </div>
+    </nav>
+</header>
 
+<main id="main-content" class="page-shell">
+    {% if messages %}
+        <div class="message-stack" aria-label="Notifications">
+            {% for message in messages %}
+                <div class="notice notice-{{ message.tags|default:'info' }}"
+                     role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <a class="brand brand-footer" href="{% url 'home' %}">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span>Book<span class="brand-light">Rent</span></span>
+        </a>
+        <p>Good books deserve another chapter.</p>
     </div>
-</nav>
-
-<div class="container mt-4">
-
-    {% block content %}
-    {% endblock %}
-
-</div>
-
+</footer>
+<script src="{% static 'js/main.js' %}" defer></script>
 </body>
 </html>

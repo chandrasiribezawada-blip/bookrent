@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Access unavailable — BookRent{% endblock %}
+
+{% block content %}
+<section class="empty-state page-empty" aria-labelledby="permission-title">
+    <span class="eyebrow">A little detour</span>
+    <h1 id="permission-title">This page isn’t available to your account.</h1>
+    <p>Please return to BookRent and continue exploring.</p>
+    <a class="button button-primary" href="{% url 'home' %}">Back to home</a>
+</section>
+{% endblock %}

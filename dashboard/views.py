@@ -9,7 +9,7 @@ from rentals.models import RentalRequest
 @login_required
 def admin_dashboard(request):
 
-    if request.user.role != 'ADMIN':
+    if request.user.role != 'ADMIN' and not request.user.is_staff:
         return render(request, '403.html')
 
     context = {
@@ -48,6 +48,6 @@ def admin_dashboard(request):
 
     return render(
         request,
-        'dashboard/admin_dashboard.html',
+        'admin_dashboard.html',
         context
     )

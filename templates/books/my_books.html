@@ -1,33 +1,54 @@
 {% extends 'base.html' %}
 
+{% block title %}My collection — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>My Books</h2>
-
-{% for book in books %}
-
-<div class="card mb-3">
-
-    <div class="card-body">
-
-        <h5>
-    <a href="{% url 'book_detail' book.id %}">
-        {{ book.title }}
-    </a>
-</h5>
-
-        <p>{{ book.author }}</p>
-
-        <p>{{ book.category }}</p>
-
+<section class="page-heading page-heading-split">
+    <div>
+        <span class="eyebrow">Your bookshelf, shared</span>
+        <h1>My collection</h1>
+        <p>Keep track of the books you’ve listed for the community.</p>
     </div>
+    <a class="button button-primary" href="{% url 'add_book' %}">Add a book <span aria-hidden="true">+</span></a>
+</section>
 
-</div>
-
-{% empty %}
-
-<p>No books added yet.</p>
-
-{% endfor %}
-
+{% if books %}
+    <section class="book-grid" aria-label="My books">
+        {% for book in books %}
+            <article class="book-card">
+                <a class="book-cover-link" href="{% url 'book_detail' book.id %}" aria-label="View {{ book.title }}">
+                    <div class="book-cover">
+                        {% if book.image %}
+                            <img src="{{ book.image.url }}" alt="Cover of {{ book.title }}">
+                        {% else %}
+                            <div class="cover-placeholder" role="img" aria-label="Placeholder cover; no image provided for {{ book.title }}">
+                                <span class="cover-mark" aria-hidden="true">B</span>
+                                <span class="cover-title">{{ book.title }}</span>
+                                <span class="cover-author">{{ book.author }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="book-card-content">
+                    <div class="book-meta">
+                        <span class="category-label">{{ book.category }}</span>
+                        <span class="status-badge {% if book.is_available %}status-available{% else %}status-unavailable{% endif %}">
+                            {% if book.is_available %}Available{% else %}Borrowed{% endif %}
+                        </span>
+                    </div>
+                    <h2><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></h2>
+                    <p class="book-author">by {{ book.author }}</p>
+                    <a class="text-link" href="{% url 'book_detail' book.id %}">View book details <span aria-hidden="true">→</span></a>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state" aria-labelledby="collection-empty-title">
+        <span class="empty-mark" aria-hidden="true">B</span>
+        <h2 id="collection-empty-title">Your collection starts with one book.</h2>
+        <p>List a book you love and let another reader discover it.</p>
+        <a class="button button-primary" href="{% url 'add_book' %}">List your first book</a>
+    </section>
+{% endif %}
 {% endblock %}

@@ -1,22 +1,25 @@
 {% extends 'base.html' %}
 
+{% block title %}Join as a reader — BookRent{% endblock %}
+
 {% block content %}
-
-<h2>Reader Registration</h2>
-
-<form method="POST">
-
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit"
-            class="btn btn-primary">
-
-        Register
-
-    </button>
-
-</form>
-
+<section class="form-page" aria-labelledby="register-title">
+    <div class="form-aside reader-aside">
+        <span class="eyebrow">For the curious reader</span>
+        <h1>There’s a story out there with your name on it.</h1>
+        <p>Find books shared by readers and keep track of the ones you borrow.</p>
+        <span class="aside-ornament" aria-hidden="true">“</span>
+    </div>
+    <div class="form-panel">
+        <span class="eyebrow">Find your next read</span>
+        <h2 id="register-title">Create a reader account</h2>
+        <p class="form-intro">Join BookRent and start exploring the shelves.</p>
+        <form method="post" class="form-shell">
+            {% csrf_token %}
+            {% include 'partials/form_fields.html' with fixed_role='BORROWER' fixed_role_label='Reader' fixed_role_switch='register_owner' fixed_role_switch_label='Register as owner →' %}
+            <button class="button button-primary button-full" type="submit">Create reader account <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-switch">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+</section>
 {% endblock %}

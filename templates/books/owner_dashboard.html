@@ -1,74 +1,49 @@
 {% extends 'base.html' %}
 
+{% block title %}Owner dashboard — BookRent{% endblock %}
+
 {% block content %}
-
-<h2 class="mb-4">Owner Dashboard</h2>
-
-<div class="row">
-
-    <div class="col-md-3">
-        <div class="card text-center shadow">
-            <div class="card-body">
-                <h3>{{ total_books }}</h3>
-                <p>Total Books</p>
-            </div>
-        </div>
+<section class="page-heading page-heading-split">
+    <div>
+        <span class="eyebrow">Your BookRent space</span>
+        <h1>Owner dashboard</h1>
+        <p>A clear view of your collection and the readers who found it.</p>
     </div>
+    <a class="button button-primary" href="{% url 'add_book' %}">List a book <span aria-hidden="true">+</span></a>
+</section>
 
-    <div class="col-md-3">
-        <div class="card text-center shadow">
-            <div class="card-body">
-                <h3>{{ available_books }}</h3>
-                <p>Available Books</p>
-            </div>
-        </div>
+<section class="stat-grid" aria-label="Collection statistics">
+    <article class="stat-card stat-card-featured">
+        <span class="stat-label">Books in your collection</span>
+        <strong class="stat-number">{{ total_books }}</strong>
+        <span class="stat-note">Across your listed titles</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Available now</span>
+        <strong class="stat-number">{{ available_books }}</strong>
+        <span class="stat-note">Ready for a new reader</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Waiting for you</span>
+        <strong class="stat-number">{{ pending_requests }}</strong>
+        <span class="stat-note">Pending requests</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">On a new shelf</span>
+        <strong class="stat-number">{{ approved_requests }}</strong>
+        <span class="stat-note">Approved rentals</span>
+    </article>
+</section>
+
+<section class="dashboard-next">
+    <div>
+        <span class="eyebrow">Your next step</span>
+        <h2>Keep your shelf moving.</h2>
+        <p>Review requests from readers or add another book to your collection.</p>
     </div>
-
-    <div class="col-md-3">
-        <div class="card text-center shadow">
-            <div class="card-body">
-                <h3>{{ pending_requests }}</h3>
-                <p>Pending Requests</p>
-            </div>
-        </div>
+    <div class="dashboard-actions">
+        <a class="button button-secondary" href="{% url 'my_books' %}">View my collection</a>
+        <a class="button button-secondary" href="{% url 'owner_requests' %}">Review requests</a>
     </div>
-
-    <div class="col-md-3">
-        <div class="card text-center shadow">
-            <div class="card-body">
-                <h3>{{ approved_requests }}</h3>
-                <p>Approved Rentals</p>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<hr>
-
-<div class="mt-4">
-
-    <a href="{% url 'add_book' %}"
-       class="btn btn-success">
-
-       Add Book
-
-    </a>
-
-    <a href="{% url 'my_books' %}"
-       class="btn btn-primary">
-
-       My Books
-
-    </a>
-
-    <a href="{% url 'owner_requests' %}"
-       class="btn btn-warning">
-
-       Rental Requests
-
-    </a>
-
-</div>
-
+</section>
 {% endblock %}
